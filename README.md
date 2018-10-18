@@ -1,4 +1,4 @@
-##Dependencies:
+## Dependencies:
 - lodash.orderby
 - react-search-input
 - react-awesome-modal
@@ -7,7 +7,7 @@
 - jquery
 
 
-##Properties:
+## Properties:
 - config (Json Array): file describing the table structure including header and configuration for each cell. 
 ```json
 [
@@ -65,7 +65,7 @@ take care of what should be displayed.
 - settingsLink (String) : link to settings page which can configure the table.
  
 
-##Events
+## Events
 - OnRowDoubleClick (function): function that will handle the row double click.
 
 `@param event: event object generated from double clicking on row. contains information about target element.`
@@ -81,4 +81,10 @@ take care of what should be displayed.
 `@param event: event object generated from clicking (or say selecting) on row. contains information about target element.`
 
 `@param data: data in json array which contains all selected rows data.`
+
+## Notes:
+- columns can be resize by dragging.
+- press ctrl key to sort by multiple columns
+- text change in master search box filter data in all columns.   
+ 
 
