@@ -1,3 +1,8 @@
+A sortable, searchable table build with react based components that works on configuration and data both in JSON format. 
+All pieces are grouped together as small components such as Table is split into header, body; header is split into header text and filter; filter is divided into search box and advance filter; body is split into row and cells; pagination is another component.
+
+Json configuration is matched with columnName from json data to display at correct cell position.
+
 ## Dependencies:
 - lodash.orderby
 - react-search-input
@@ -85,6 +90,63 @@ take care of what should be displayed.
 ## Notes:
 - columns can be resize by dragging.
 - press ctrl key to sort by multiple columns
-- text change in master search box filter data in all columns.   
+- text change in master search box filter data in all columns.  
+- works with bootstrap class css. 
+
+## example
+```javascript
+import React, { Component } from 'react';
+import Table from './components/table/body/Page'
+
+const DefaultData = require('./components/table/data/DefaultData');
+const DefaultConfig = require('./components/table/config/DefaultConfig');
+
+class App extends Component {
+    onRowClick(event, data){
+        /*
+        * implement here
+        * */
+    }
+
+    onRowDoubleClick(event, data){
+        /*
+        * implement here
+        * */
+    }
+
+    onRowSelection(event, data){
+        /*
+        * implement here
+        * */
+    }
+
+    render() {
+        return (
+            <div>
+                <Table
+                    data={DefaultData.data}
+                    config={DefaultConfig} // default = defaultconfig
+                    showAllData={false} // default false
+                    onRowClick={this.onRowClick}
+                    onRowDoubleClick={this.onRowDoubleClick}
+                    onRowSelection={this.onRowSelection}
+                    resultsPerPage={50} // default 10
+                    showHeader={true}
+                    showPagination={true}
+                    masterSearch={true}
+                    heading={"My React Table"}
+                    //  customCellFormatters={customCellFormatters}
+                    //  colorConfig={colorConfig}
+                    //  settingsLink={"/smad-web/settings/" + appCode}
+                    className={" table-sm table-hover table-bordered table-striped "}
+                />
+            </div>
+        );
+    }
+}
+
+export default App;
+
+```
  
 
