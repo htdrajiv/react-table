@@ -1,0 +1,139 @@
+/*
+grid css
+*/
+.gridParent #react-grid-table #react-grid-table-body{
+    overflow-y:scroll;
+    width:100%;
+    height: 80%;
+}
+
+.gridParent #react-grid-table {
+    border-width: 1px 0px 0px 1px;
+    font-size: 11pt;
+    font-family: Calibri, serif;
+    font-weight: 100;
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+
+.gridParent #react-grid-table thead th {
+    background-repeat: repeat-x;
+    font-weight: normal;
+    font-size: 14px;
+    border-width: 0px 1px 1px 0px;
+}
+
+.gridParent #react-grid-table tbody td {
+    padding: 0px 4px 0px 2px;
+    border-width: 0px 1px 1px 0px;
+}
+
+.gridParent .pagination {
+    display: inline-block;
+    padding-left: 0;
+    margin: 8px 20px;
+    border-radius: 4px;
+}
+
+.gridParent .pull-left {
+    float: left !important;
+}
+.gridParent .pull-right {
+    float: right !important;
+}
+
+.gridParent .grid-search {
+    width: 100%;
+    font-size: 15px;
+    margin: 0 10px 12px 0px;
+    border-bottom: 1px solid #b3b3b3;
+    padding: 5px 5px;
+}
+
+.gridParent .gridRowsContainer{
+    overflow-y: scroll;
+    width: 100%;
+}
+
+.gridParent .anchor:hover{
+    font-size: 105%;
+}
+/*
+--------------------------------------------------------------------
+*/
+.gridParent .defaultCell{
+    white-space: nowrap;
+    overflow: hidden;
+    width: calc(100% - 15px);
+    text-overflow: ellipsis;
+    flex-basis: 0;
+    flex-grow: 1;
+    position: relative;
+    text-align: center;
+}
+
+.gridParent .inner-header{
+    white-space: nowrap;
+    overflow: hidden;
+    width: calc(100% - 15px);
+    text-overflow: ellipsis;
+    flex-basis: 0;
+    flex-grow: 1;
+    position: relative;
+    text-align: center;
+}
+
+.gridParent .customHeaderContainer {
+    border-bottom: 2px solid #ddd;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    Background: rgba(255, 137, 10, 0.78);
+}
+
+.gridParent .inner-header {
+    color: white;
+}
+
+.gridParent .clickable{
+    cursor: pointer;
+}
+
+.gridParent .grid-search {
+    width: 100%;
+    font-size: 15px;
+    border-bottom: 1px solid #b3b3b3;
+    padding: 5px 5px;
+}
+
+.gridParent .header-search{
+    width: 85%;
+}
+
+.gridParent a.text-white {color: white;}
+
+.gridParent .smartGridScroll {
+    overflow-x: scroll !important;
+}
+
+.table td, .table th{
+    padding: 0;
+}
+
+.gridParent .table > thead > tr > th,.gridParent .table > tbody > tr > td {
+    padding: 0;
+}
+
+.gridParent .headers{
+    font-size: medium;
+    margin-bottom: 1%;
+
+}
+
+.gridParent ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    font-size: 85%;
+}
+
+.gridParent :-ms-input-placeholder { /* IE 10+ */
+    font-size: 85%;
+}

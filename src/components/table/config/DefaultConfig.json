@@ -1,0 +1,86 @@
+[
+  {
+    "columnName": "id",
+    "displayName": "Id",
+    "search": "true",
+    "sort": "true",
+    "classNames": "clickable",
+    "hidden": "false",
+    "type": "integer",
+    "indexCol": "true",
+    "status":"true",
+    "order":1
+  },
+  {
+    "columnName": "firstName",
+    "displayName": "First Name",
+    "search": "true",
+    "sort": "true",
+    "classNames": "clickable",
+    "hidden": "false",
+    "type": "string",
+    "indexCol": "false",
+    "status":"false",
+    "order":2
+  },
+  {
+    "columnName": "lastName",
+    "displayName": "Last Name",
+    "search": "true",
+    "sort": "true",
+    "classNames": "clickable",
+    "hidden": "false",
+    "type": "string",
+    "indexCol": "false",
+    "status":"false",
+    "order":3
+  },
+  {
+    "columnName": "city",
+    "displayName": "City",
+    "search": "true",
+    "sort": "true",
+    "classNames": "clickable",
+    "hidden": "false",
+    "type": "string",
+    "indexCol": "false",
+    "status":"false",
+    "order":4
+  },
+  {
+    "columnName": "state",
+    "displayName": "State",
+    "search": "true",
+    "sort": "true",
+    "classNames": "clickable",
+    "hidden": "false",
+    "type": "string",
+    "indexCol": "false",
+    "status":"false",
+    "order":5
+  },
+  {
+    "columnName": "country",
+    "displayName": "Country",
+    "search": "true",
+    "sort": "true",
+    "classNames": "clickable",
+    "hidden": "false",
+    "type": "string",
+    "indexCol": "false",
+    "status":"false",
+    "order":6
+  },
+  {
+    "columnName": "email",
+    "displayName": "Email",
+    "search": "true",
+    "sort": "true",
+    "classNames": "clickable",
+    "hidden": "false",
+    "type": "string",
+    "indexCol": "false",
+    "status":"false",
+    "order":7
+  }
+]
