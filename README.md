@@ -87,7 +87,7 @@ take care of what should be displayed.
 
 `@param data: data in json array which contains all selected rows data.`
 
-## Notes:
+## Features:
 - columns can be resize by dragging.
 - press ctrl key to sort by multiple columns
 - text change in master search box filter data in all columns.  
