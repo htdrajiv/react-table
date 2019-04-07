@@ -1,13 +1,14 @@
-/* eslint-disable react/no-direct-mutation-state,array-callback-return */
 import React from 'react';
 import orderby from 'lodash.orderby';
 
 // import LoaderSpin from '../../common/Loader';
-import GridHeader from '../header/GridHeader.jsx';
-import GridPagination from '../pagination/GridPagination.jsx';
-import GridRows from './GridRows.jsx';
-import {createFilter} from 'react-search-input'
+import GridHeader from '../header/GridHeader';
+import GridPagination from '../pagination/GridPagination';
+import GridRows from './GridRows.js';
+import _  from "underscore";
+import SearchInput, {createFilter} from 'react-search-input'
 import ColumnResizer from 'column-resizer';
+import Tools from '../tools/tools';
 
 const filterCommon = require('../../filters/FilterCommon');
 
@@ -21,7 +22,7 @@ class SmartGrid extends React.Component {
          * @totalRow for holding total rows count
          * */
 
-        this.state = { search: '', searchSource:[], searchColumns:{}, totalRow:'', refresh: true, filterProps: [] };
+        this.state = { search: '', searchSource:[], searchColumns:{}, totalRow:'', refresh: true, filterProps: [], reactGridTable:{} };
         this.initSearchConfig = this.initSearchConfig.bind(this);
         this.onChangeGrid = this.onChangeGrid.bind(this);
         this.sortDataOnColumn = this.sortDataOnColumn.bind(this);
@@ -40,20 +41,28 @@ class SmartGrid extends React.Component {
     }
 
     componentDidMount(){
-        new ColumnResizer(document.querySelector("#react-grid-table"),{
-            liveDrag:true,
-            draggingClass:"rangeDrag",
-            gripInnerHtml:"<div class='rangeGrip' ></div>",
-            resizeMode:'overflow',
-            // width:'10em'
-        });
-
+        this.state.reactGridTable = document.querySelector("#react-grid-table");
+        this.initializeResize();
         document.getElementById("react-grid-table-body").addEventListener("keydown", function(e) {
             // space and arrow keys
             if([38, 40, 32].indexOf(e.keyCode) > -1) {
                 e.preventDefault();
             }
         }, false);
+    }
+
+    componentDidUpdate(prevProps){
+        this.initializeResize();
+    }
+
+    initializeResize(){
+        new ColumnResizer(this.state.reactGridTable,{
+            liveDrag:true,
+            draggingClass:"rangeDrag",
+            gripInnerHtml:"<div class='rangeGrip' ></div>",
+            resizeMode:'overflow',
+            // width:'10em'
+        });
     }
 
     initSearchConfig(){
@@ -74,7 +83,7 @@ class SmartGrid extends React.Component {
         if (this.props.sortColumn === '')
             return data;
         data.map((item, index) => {
-            return item['_index'] = index;
+            item['_index'] = index;
         });
         data = this.sortData(data);
         return data;
@@ -203,57 +212,68 @@ class SmartGrid extends React.Component {
         var resultsOnPage = data && data.length <= this.props.resultsPerPage ? data.length : this.props.resultsPerPage;
         let indexOffSet = this.computeFrom(this.props.currentPage,this.props.resultsPerPage);
         let indexColumn = this.findIndexColumn();
+        var fixedHeight = this.props.fixedHeight;
         return (
             <div className={'gridParent'} style={this.props.style}>
                 <form ref={"main-form"}>
-                        <div className="headers">
-                            <h4> {this.props.heading} </h4>
-                            {this.props.settingsLink!== null ? ( <span title={"settings"}> <a href={this.props.settingsLink} target={"_blank"}> Settings <i className="fa fa-cogs" /></a> </span> ) : ''}
-                            <button type="button" onClick={this.refresh} >Reset All Filters<i className="glyphicon glyphicon-refresh"/></button>
-                        </div>
-                    <div>
-                        {this.props.masterSearch ? <input type="SmartInput" placeholder="Search Grid" className="grid-search" onChange={this.masterSearchHandler}/> : null}
-                    </div>
-                    {!this.props.showAllData ? (<GridPagination {...this.props}
-                                                                className=''
-                                                                style={{}}
-                                                                currentPage={this.props.currentPage}
-                                                                totalCount={totalRows}
-                                                                onChangeGrid={this.onChangeGrid}
-                                                                onRefresh={this.getResponseData}
-                                                                resultsOnPage={resultsOnPage}/>) : "Total Rows : "+totalRows}
-                    <div className="table-responsive-sm smartGridScroll" >
-                        <table id={"react-grid-table"} className={"table" +this.props.className}
-                            style={{height: this.props.height}}
+                <div className="">
+                    <h3> {this.props.heading} </h3>
+                </div>
+                <div className="icons "  style={{margin:"0 0 1vh 0"}}>
+                    <span style={{margin:"0 1vh 0 0"}}><button type="button" className={"btn btn-raised btn-xs"} onClick={this.refresh} >Reset All Filters</button></span>
+                    { <Tools {...this.props}/>}
+                </div>
+                {this.props.masterSearch ? <div style={{clear:"both"}}> <input type="SmartInput" placeholder="Search Grid" className="grid-search" onChange={this.masterSearchHandler}/> </div> : null}
+                {!this.props.showAllData ? (<GridPagination {...this.props}
+                                                           className=''
+                                                           style={{}}
+                                                           currentPage={this.props.currentPage}
+                                                           totalCount={totalRows}
+                                                           onChangeGrid={this.onChangeGrid}
+                                                           onRefresh={this.getResponseData}
+                                                           resultsOnPage={resultsOnPage}/>) : "Total Rows : "+totalRows}
+                <div className="table-responsive-sm smartGridScroll" style={{height: fixedHeight}}>
+                    <table id={"react-grid-table"} className={"table table-sm .table-hover .table-bordered table-striped excel-style"}
+                            >
+                        <thead>
+                        <GridHeader {...this.props}
+                                    indexOffset = {indexOffSet}
+                                    onSearchBoxChange={this.localSearchHandler}
+                                    className=''
+                                    style={{}}
+                                    totalCount={totalRows}
+                                    onChangeGrid={this.onChangeGrid}
+                                    resultsOnPage={resultsOnPage}
+                                    data={allData}
+                                    indexColumn={indexColumn}
+                                    filterProps={this.state.filterProps}
+                                    handleAdvanceFilter={this.handleAdvanceFilterOptions}
+                        />
+                        </thead>
+                        <tbody id={'react-grid-table-body'} className={'gridRowsContainer'}
+                               style={Number.isInteger = Number.isInteger || function() {
+                                   return typeof fixedHeight === 'number' &&
+                                       isFinite(fixedHeight) &&
+                                       Math.floor(fixedHeight) === fixedHeight;
+                               } ? {
+                                   overflowY: 'scroll',
+                                   // display: 'block',
+                                   // width:'100',
+                                   height: fixedHeight
+                               } : {}}
                         >
-                            <thead>
-                            <GridHeader {...this.props}
-                                        indexOffset = {indexOffSet}
-                                        onSearchBoxChange={this.localSearchHandler}
-                                        className=''
-                                        style={{}}
-                                        totalCount={totalRows}
-                                        onChangeGrid={this.onChangeGrid}
-                                        resultsOnPage={resultsOnPage}
-                                        data={allData}
-                                        indexColumn={indexColumn}
-                                        filterProps={this.state.filterProps}
-                                        handleAdvanceFilter={this.handleAdvanceFilterOptions}
-                            />
-                            </thead>
-                            <tbody id={'react-grid-table-body'} className={'gridRowsContainer'}>
-                            <GridRows {...this.props}
-                                      indexOffset = {indexOffSet}
-                                      className=''
-                                      style={{}}
-                                      onChangeGrid={this.onChangeGrid}
-                                      resultsOnPage={resultsOnPage}
-                                      data={data}
-                                      indexColumn={indexColumn}
-                            />
-                            </tbody>
-                        </table>
-                    </div>
+                        <GridRows {...this.props}
+                                  indexOffset = {indexOffSet}
+                                  className=''
+                                  style={{}}
+                                  onChangeGrid={this.onChangeGrid}
+                                  resultsOnPage={resultsOnPage}
+                                  data={data}
+                                  indexColumn={indexColumn}
+                        />
+                        </tbody>
+                    </table>
+                </div>
                 </form>
             </div>
         );
@@ -265,6 +285,10 @@ SmartGrid.defaultProps = {
     className: '',
     data: null,
     showAllData: false,
+    filterOptions: false,
+    settingOptions: false,
+    appCode:"",
+    refreshOptions:false,
     resultsPerPage: 10,
     currentPage: 1,
     sortColumn: '',
@@ -276,13 +300,18 @@ SmartGrid.defaultProps = {
     actionList: [],
     onActionClick: () => {
     },
+    showCheckbox: false,
+    showCheckAllCheckbox: false,
     onHeaderClick: null,
-    // showHeader: true,
+    showHeader: true,
     showPagination: true,
     selectedRows: {},
     elementId: null,
     colorConfig: {},
     settingsLink: null,
+    transform: function (response, elementId) {
+        return response.body.data;
+    }
 };
 
 export default SmartGrid;

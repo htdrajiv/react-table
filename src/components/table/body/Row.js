@@ -1,63 +1,17 @@
-/* eslint-disable react/no-direct-mutation-state */
 import React from 'react';
 import CustomLink from "./Link";
-import $ from 'jquery'
 
-
-class Row extends React.Component {
+class DefaultRow extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { rowLink: "", currentlySelectedRowId:"" }
-    }
-
-    handleOnClick(event) {
-        this.commonOnClick(event);
-        this.props.onRowClick(event,this.props.data);
-        this.setState({
-            currentlySelectedRowId: this.props.rowId
-        })
-    }
-
-    handleOnDoubleClick(event){
-        this.commonOnClick(event);
-        this.props.onRowDoubleClick(event, this.props.data);
-        this.setState({
-            currentlySelectedRowId: this.props.rowId
-        })
-    }
-
-    commonOnClick(event){
-        event.target.focus();
-        this.props.handleRowSelection(event);
-        this.props.addClassToSelectedRow(this.props.rowId);
-    }
-
-    handleKeyPress(event){
-        if(event.keyCode === 38)
-            this.onUpArrowPress();
-        else if(event.keyCode === 40)
-            this.onDownArrowPress();
-
-    }
-
-    onUpArrowPress(){
-        var row = $("#"+this.state.currentlySelectedRowId);
-        let ancestor = row.prev();
-        if(ancestor!==null && ancestor!==undefined)
-            ancestor.find("td:first-child").click();
-    }
-
-    onDownArrowPress(){
-        var row = $("#"+this.state.currentlySelectedRowId);
-        let successor = row.next();
-        if(successor!==null && successor!==undefined)
-            successor.find("td:first-child").click();
+        this.state = { expand: false, rowLink: "" }
     }
 
     render() {
         var columnKey = this.props.rowLink + "/" + this.props.data[this.props.columnMetadata.filter(function(c){ return c.indexCol === "true" }).map(function(c){return c.columnName})];
         var rowValColor = this.props.data[this.props.columnMetadata.filter(function(c){ return c.status === "true" }).map(function(c){return c.columnName})];
         var rowColorClass = this.props.colorConfig[rowValColor];
+        var expandIcon = (this.state.expand || this.props.expandAll)? <i className="fa fa-angle-up"/>:<i className="fa fa-angle-down"/> ;
         var rowCells = (
             this.props.columnMetadata.sort(function(a,b) {return a.order - b.order}).map((columnMeta, columnIndex) => {
                 var displayDiv = "";
@@ -89,8 +43,7 @@ class Row extends React.Component {
                         cellToolTip = columnMeta.displayName;
                     }
                     // style = Object.assign(style, columnMeta.style);
-                    displayDiv = (<td tabIndex={columnIndex} key={columnIndex} onClick={this.handleOnClick.bind(this)} onDoubleClick={this.handleOnDoubleClick.bind(this)} ref="table-row"
-                            onKeyUp={this.handleKeyPress.bind(this)} onKeyDown={this.props.setPressedCtrlKey} style={{overflow:'visible'}}>
+                    displayDiv = (<td tabIndex={columnIndex} key={columnIndex} style={{overflow:'visible'}} >
                             <div id={"column-"+this.props.rowId+"-"+columnIndex}
                                 className={rowColorClass + ' defaultCell .table-hover cell column-' + columnIndex + ' column-' + columnMeta.columnName + " " + columnMeta.className}
                                 style={style} key={columnIndex} title={cellToolTip}>
@@ -110,13 +63,13 @@ class Row extends React.Component {
     }
 }
 
-Row.defaultProps = {
+DefaultRow.defaultProps = {
     data: {},
     columnMetadata: [],
     className: '',
+    onExpand: () => { },
     onRowClick: () => { },
-    onRowDoubleClick: () => { },
-    onRowSelection: () => { }
+    onRowDoubleClick: () => { }
 };
 
-export default Row;
+export default DefaultRow

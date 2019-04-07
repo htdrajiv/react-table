@@ -1,6 +1,9 @@
 const React = require('react');
 
 class Link extends React.Component {
+    constructor(props){
+        super(props)
+    }
 
     render(){
         return(
